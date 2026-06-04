@@ -1,12 +1,10 @@
 from google import genai
-from dotenv import load_dotenv
 import os
 from app.utils.json_parser import parse_json_response
-
-load_dotenv()
+from app.config.settings import settings
 
 client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
+    api_key=settings.gemini_api_key
 )
 
 def analyze_disruption(event_text: str):
