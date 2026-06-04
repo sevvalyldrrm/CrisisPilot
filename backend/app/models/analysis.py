@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from app.services.simulation_service import simulate_response
 class AlternativeRoute(BaseModel):
     route: str
     delay_days: int
@@ -10,7 +10,7 @@ class EconomicImpact(BaseModel):
 
 class CrisisAnalysis(BaseModel):
     event_name: str
-    event_type: str
+    event_type: list[str]
     risk_score: int
     severity: str
 
@@ -24,3 +24,6 @@ class CrisisAnalysis(BaseModel):
     alternative_routes: list[AlternativeRoute]
 
     confidence_score: int
+
+class SimulationRequest(BaseModel):
+    event: str

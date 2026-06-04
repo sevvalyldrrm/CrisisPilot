@@ -1,8 +1,10 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from app.repositories.event_repository import EventRepository
-from app.services.gemini_service import analyze_disruption
-from datetime import datetime
+from app.services.simulation_service import simulate_response
+from app.services.simulation_service import simulate_response
+from app.models.analysis import SimulationRequest
+from datetime import datetime, timezone
 router = APIRouter()
 
 class EventRequest(BaseModel):
@@ -11,21 +13,19 @@ class EventRequest(BaseModel):
 @router.post("/analyze")
 def analyze(request: EventRequest):
 
-    result = analyze_disruption(
+    result = simulate_response(
         request.event
     )
 
     EventRepository.create(
         {
             "event_text": request.event,
-            "analysis": result,
-            "created_at": datetime.utcnow()
+            "response": result,
+            "created_at": datetime.now(timezone.utc)
         }
     )
 
-    return {
-        "analysis": result
-    }
+    return result
 
 @router.get("/events")
 def get_events():
@@ -38,3 +38,12 @@ def get_events():
     return {
         "events": events
     }
+
+@router.post("/simulate")
+def simulate(request: SimulationRequest):
+
+    result = simulate_response(
+        request.event
+    )
+
+    return result
