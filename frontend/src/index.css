@@ -1,0 +1,53 @@
+/* Tailwind CSS directives - processed by PostCSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(48, 54, 61, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(48, 54, 61, 0.2) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.pulse-point {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.7); }
+  70% { transform: scale(1.2); opacity: 0; box-shadow: 0 0 0 10px rgba(248, 81, 73, 0); }
+  100% { transform: scale(0.8); opacity: 0; box-shadow: 0 0 0 0 rgba(248, 81, 73, 0); }
+}
+
+@keyframes processing-pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.processing-dot {
+  animation: processing-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-ring-blue {
+  0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(170, 199, 255, 0.7); }
+  70% { transform: scale(1.2); opacity: 0; box-shadow: 0 0 0 10px rgba(170, 199, 255, 0); }
+  100% { transform: scale(0.8); opacity: 0; box-shadow: 0 0 0 0 rgba(170, 199, 255, 0); }
+}
+
+/* Map pulse animation for event markers */
+.map-pulse {
+  animation: map-pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes map-pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* Custom scrollbar for high-density feel */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #0A0C10; }
+::-webkit-scrollbar-thumb { background: #30363D; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #414753; }
