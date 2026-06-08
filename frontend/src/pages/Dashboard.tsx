@@ -1,10 +1,13 @@
 import { TelemetryCard, MissionCard, AgentMissionCenter, EscalationTimeline, RiskHeatmap, HighRiskRegionsTable } from '@/widgets'
 import { useDashboardMetrics } from '@/hooks/useDashboardMetrics'
+import { useEvents } from '@/hooks/useEvents'
 import { ErrorState } from '@/shared/ui/ErrorState'
-import type { TelemetryMetric, Mission, Escalation, Event } from '@/entities/types'
+import type { TelemetryMetric, Mission, Escalation } from '@/entities/types'
 
 export const Dashboard = () => {
   const { data: metrics, isLoading, error, refetch } = useDashboardMetrics()
+  const { data: eventData } = useEvents()
+  const events = eventData?.events ?? []
 
   if (isLoading) {
     return (
@@ -97,7 +100,7 @@ export const Dashboard = () => {
     { step: 'Risk Forecast', status: 'pending' as const, timestamp: '--:--Z' },
   ]
 
-  const highRiskRegions: Event[] = []
+  const highRiskRegions = events
 
   return (
     <main className="flex-1 p-gutter overflow-y-auto overflow-x-hidden flex flex-col gap-gutter">
