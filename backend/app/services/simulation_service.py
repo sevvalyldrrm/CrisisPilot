@@ -1,9 +1,10 @@
 from app.services.gemini_service import client
 from app.utils.json_parser import parse_json_response
+from app.services.elasticsearch_service import get_similar_events
 
 
 def simulate_response(event_text: str):
-
+    similar_events = get_similar_events(event_text)
     prompt = f"""
     You are CrisisPilot.
 
@@ -37,6 +38,10 @@ def simulate_response(event_text: str):
     Disruption Event:
 
     {event_text}
+
+    Historical Similar Events:
+
+    {similar_events}
 
     Return ONLY valid JSON.
 
