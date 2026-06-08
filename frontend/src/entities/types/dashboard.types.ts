@@ -1,5 +1,3 @@
-import type { Event } from './event.types'
-
 export interface TelemetryMetric {
   label: string
   value: number
@@ -35,10 +33,22 @@ export interface Escalation {
   severity: 'critical' | 'elevated' | 'normal'
 }
 
-export interface DashboardData {
-  telemetry: TelemetryMetric[]
-  missions: Mission[]
-  agentSteps: AgentStep[]
-  escalations: Escalation[]
-  highRiskRegions: Event[]
+export interface RecentEscalation {
+  title: string
+  level: string
+}
+
+export interface ActiveMission {
+  name: string
+  risk: number
+  progress: number
+}
+
+export interface DashboardMetrics {
+  globalRiskScore: number
+  activeDisruptions: number
+  criticalAlerts: number
+  stabilityIndex: number
+  recentEscalations: RecentEscalation[]
+  activeMissions: ActiveMission[]
 }
