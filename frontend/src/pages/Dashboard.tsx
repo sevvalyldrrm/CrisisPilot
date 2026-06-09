@@ -84,21 +84,38 @@ export const Dashboard = () => {
     status: 'active' as const,
   }))
 
-  const escalations: Escalation[] = metrics.recentEscalations.map((escalation, index) => ({
-    id: `ESC-${String(index + 1).padStart(3, '0')}`,
-    title: escalation.title,
-    description: 'Recent escalation detected',
-    timestamp: 'Recent',
-    severity: escalation.level === 'critical' ? 'critical' : escalation.level === 'elevated' ? 'elevated' : 'normal',
-  }))
+  const escalations: Escalation[] = metrics.recentEscalations.map(
+    (escalation, index) => {
+      const level = escalation.level.toLowerCase()
+
+      return {
+        id: `ESC-${String(index + 1).padStart(3, '0')}`,
+        title: escalation.title,
+        description: 'Recent escalation detected',
+        timestamp: 'Recent',
+        severity: level.includes('critical')
+          ? 'critical'
+          : level.includes('high')
+          ? 'elevated'
+          : 'normal',
+      }
+    }
+  )
 
   // Keep mock data for components not provided by backend
-  const agentSteps = [
-    { step: 'Event Detection', status: 'complete' as const, confidence: 99.8, timestamp: '14:02Z' },
-    { step: 'Impact Assessment', status: 'complete' as const, confidence: 94.2, timestamp: '14:05Z' },
-    { step: 'Historical Correlation', status: 'processing' as const, confidence: 88.0, timestamp: '14:08Z' },
-    { step: 'Risk Forecast', status: 'pending' as const, timestamp: '--:--Z' },
-  ]
+  const agentSteps = events.slice(0, 4).map((event) => ({
+    step:
+      event.analysis?.recommended_strategy?.name ??
+      event.zoneName,
+
+    status: 'complete' as const,
+
+    confidence:
+      event.analysis?.confidence_score ?? 0,
+
+    timestamp: new Date(event.timestamp)
+      .toLocaleTimeString(),
+  }))
 
   const highRiskRegions = events
 
