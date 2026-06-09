@@ -49,7 +49,6 @@ export const Dashboard = () => {
       label: 'Global Risk Score',
       value: metrics.globalRiskScore,
       maxValue: 100,
-      unit: '/100',
       status: metrics.globalRiskScore >= 80 ? 'critical' : metrics.globalRiskScore >= 60 ? 'warning' : 'stable',
       icon: 'monitoring',
     },
@@ -131,13 +130,13 @@ export const Dashboard = () => {
       {/* Main Workspace: Bento Layout */}
       <div className="grid grid-cols-12 grid-rows-2 gap-gutter flex-1 min-h-[500px]">
         {/* Center Map Area (Spans 8 cols, 2 rows) */}
-        <RiskHeatmap />
+        <RiskHeatmap events={events} />
 
         {/* Right Column: Timeline & Agent Mission Center */}
         <AgentMissionCenter steps={agentSteps} />
 
         {/* Escalations */}
-        <div className="col-span-4 row-span-1">
+        <div className="col-span-4 row-span-1 min-h-[250px]">
           <EscalationTimeline escalations={escalations} />
         </div>
       </div>

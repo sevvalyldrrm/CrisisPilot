@@ -18,7 +18,7 @@ export const EscalationTimeline = ({ escalations }: EscalationTimelineProps) => 
   }
 
   return (
-    <Card className="flex flex-col overflow-hidden">
+    <Card className="h-full flex flex-col overflow-hidden">
       <div className="px-density-med py-density-high border-b border-outline-variant bg-surface-container-highest/50 flex justify-between items-center">
         <span className="text-label-caps font-label-caps text-on-surface uppercase tracking-widest">
           Recent Escalations
