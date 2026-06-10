@@ -22,15 +22,19 @@ const mapBackendEventToFrontend = (backendEvent: BackendEvent): Event => {
     backendEvent.analysis ??
     backendEvent.response
 
-  // Map crisis level to status
-  const statusMap: Record<string, Event['status']> = {
-    'Critical': 'critical',
-    'High': 'elevated',
-    'Medium': 'monitoring',
-    'Low': 'stable',
-  }
+  const level =
+      analysis?.crisis_level?.toLowerCase() || ''
 
-  const status = statusMap[analysis?.crisis_level] || 'monitoring'
+    let status: Event['status'] = 'monitoring'
+
+    if (level.includes('critical'))
+      status = 'critical'
+    else if (level.includes('high'))
+      status = 'elevated'
+    else if (level.includes('medium'))
+      status = 'monitoring'
+    else if (level.includes('low'))
+      status = 'stable'
 
   return {
     id: backendEvent._id,
@@ -42,22 +46,23 @@ const mapBackendEventToFrontend = (backendEvent: BackendEvent): Event => {
     timestamp: backendEvent.created_at,
     region: 'Global',
     analysis: {
-    executive_summary: analysis?.executive_summary,
+      crisis_level: analysis?.crisis_level,
+      executive_summary: analysis?.executive_summary,
 
-    recommended_strategy: {
-      name: analysis?.recommended_strategy?.name,
-      reason: analysis?.recommended_strategy?.reason,
-    },
+      recommended_strategy: {
+        name: analysis?.recommended_strategy?.name,
+        reason: analysis?.recommended_strategy?.reason,
+      },
+      expected_outcome: analysis?.expected_outcome,
+      top_actions: analysis?.top_actions,
 
-    top_actions: analysis?.top_actions,
+      secondary_risks: analysis?.secondary_risks,
 
-    secondary_risks: analysis?.secondary_risks,
+      confidence_score: analysis?.confidence_score,
 
-    confidence_score: analysis?.confidence_score,
+      supply_chain_impact: analysis?.supply_chain_impact,
 
-    supply_chain_impact: analysis?.supply_chain_impact,
-
-    recommended_hubs: analysis?.recommended_hubs,
+      recommended_hubs: analysis?.recommended_hubs,
   },
   }
 }

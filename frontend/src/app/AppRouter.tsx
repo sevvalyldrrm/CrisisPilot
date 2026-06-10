@@ -4,6 +4,7 @@ import { Dashboard } from '@/pages/Dashboard'
 import { Events } from '@/pages/Events'
 import { AnalysisDetail } from '@/pages/AnalysisDetail'
 import { SimulationDetail } from '@/pages/SimulationDetail'
+import { ResponsePlan } from '@/pages/ResponsePlan'
 
 export const AppRouter = () => {
   return (
@@ -16,6 +17,7 @@ export const AppRouter = () => {
           <Route path="/events" element={<Events />} />
           <Route path="/analysis/:id" element={<AnalysisDetail />} />
           <Route path="/simulation/:id" element={<SimulationDetail />} />
+          <Route path="/response" element={<ResponsePlan />} />
         </Routes>
       </div>
     </div>
