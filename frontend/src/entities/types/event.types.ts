@@ -9,6 +9,7 @@ export interface Event {
   description?: string
   region?: string
   analysis?: {
+    crisis_level?: string
     executive_summary?: string
     recommended_strategy?: {
       name?: string
