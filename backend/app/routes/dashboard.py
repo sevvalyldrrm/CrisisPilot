@@ -25,10 +25,14 @@ def get_dashboard_metrics():
 
     for event in events:
 
-        analysis = event.get("analysis", {})
-
-        if analysis.get("crisis_level", "").lower() == "critical":
-            critical_count += 1
+        analysis = (
+            event.get("analysis")
+            or event.get("response")
+            or {}
+        )
+        level = analysis.get("crisis_level", "").lower()
+        if "critical" in level:
+            critical_count += 1       
 
         confidence_sum += analysis.get("confidence_score", 0)
 
