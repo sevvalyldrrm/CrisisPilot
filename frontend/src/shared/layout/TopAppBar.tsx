@@ -1,6 +1,8 @@
 import { Icon } from '@/shared/ui'
+import { useSearch } from '@/context/SearchContext'
 
 export const TopAppBar = () => {
+  const { search, setSearch } = useSearch()
   return (
     <nav className="bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center w-full px-gutter h-14 z-50 shrink-0">
       <div className="flex items-center gap-gutter">
@@ -12,6 +14,8 @@ export const TopAppBar = () => {
         <div className="flex items-center gap-unit border border-outline-variant px-2 py-1 rounded bg-surface-container-low text-label-caps font-label-caps text-on-surface-variant">
           <Icon name="search" className="text-[14px]" />
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="bg-transparent border-none text-on-surface focus:ring-0 p-0 text-[11px] w-48 placeholder-outline"
             placeholder="Search parameters..."
             type="text"

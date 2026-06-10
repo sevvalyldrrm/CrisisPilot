@@ -5,22 +5,10 @@ import type { Event, EventFilters, EventListResponse } from '@/entities/types'
 interface BackendEvent {
   _id: string
   event_text: string
-  analysis: {
-    crisis_level: string
-    confidence_score: number
-    recommended_strategy: {
-      name: string
-      reason?: string
-    }
-    executive_summary?: string
-    top_actions?: string[]
-    secondary_risks?: string[]
-    supply_chain_impact?: {
-      delay_days?: number
-      cost_increase_percent?: number
-    }
-    recommended_hubs?: string[]
-  }
+  
+  analysis?: any
+  response?: any
+
   created_at: string
 }
 
@@ -30,6 +18,10 @@ interface BackendEventListResponse {
 
 // Mapper function to convert backend events to frontend Event interface
 const mapBackendEventToFrontend = (backendEvent: BackendEvent): Event => {
+  const analysis =
+    backendEvent.analysis ??
+    backendEvent.response
+
   // Map crisis level to status
   const statusMap: Record<string, Event['status']> = {
     'Critical': 'critical',
@@ -38,29 +30,35 @@ const mapBackendEventToFrontend = (backendEvent: BackendEvent): Event => {
     'Low': 'stable',
   }
 
-  const status = statusMap[backendEvent.analysis.crisis_level] || 'monitoring'
+  const status = statusMap[analysis?.crisis_level] || 'monitoring'
 
   return {
     id: backendEvent._id,
     regionId: backendEvent._id.substring(0, 6),
     zoneName: backendEvent.event_text,
-    riskScore: backendEvent.analysis.confidence_score,
-    primaryThreatVector: backendEvent.analysis.recommended_strategy.name,
+    riskScore:  analysis?.confidence_score ?? 0,
+    primaryThreatVector: analysis?.recommended_strategy?.name ?? 'Unknown',
     status,
     timestamp: backendEvent.created_at,
     region: 'Global',
     analysis: {
-      executive_summary: backendEvent.analysis.executive_summary,
-      recommended_strategy: {
-        name: backendEvent.analysis.recommended_strategy.name,
-        reason: backendEvent.analysis.recommended_strategy.reason,
-      },
-      top_actions: backendEvent.analysis.top_actions,
-      secondary_risks: backendEvent.analysis.secondary_risks,
-      confidence_score: backendEvent.analysis.confidence_score,
-      supply_chain_impact: backendEvent.analysis.supply_chain_impact,
-      recommended_hubs: backendEvent.analysis.recommended_hubs,
+    executive_summary: analysis?.executive_summary,
+
+    recommended_strategy: {
+      name: analysis?.recommended_strategy?.name,
+      reason: analysis?.recommended_strategy?.reason,
     },
+
+    top_actions: analysis?.top_actions,
+
+    secondary_risks: analysis?.secondary_risks,
+
+    confidence_score: analysis?.confidence_score,
+
+    supply_chain_impact: analysis?.supply_chain_impact,
+
+    recommended_hubs: analysis?.recommended_hubs,
+  },
   }
 }
 
@@ -99,4 +97,12 @@ export const eventService = {
     const response = await apiClient.get<BackendEvent>(`/events/${id}`)
     return mapBackendEventToFrontend(response.data)
   },
+
+  async searchEvents(query: string) {
+  const response = await apiClient.get(
+    `/events/search?q=${encodeURIComponent(query)}`
+  )
+
+  return response.data.results
+},
 }

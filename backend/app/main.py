@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from app.services.elasticsearch_service import create_index
 from app.routes.analysis import router as analysis_router
 from app.routes.dashboard import router as dashboard_router
 
@@ -21,3 +21,7 @@ def root():
     return {
         "status": "online"
     }
+
+@app.on_event("startup")
+def startup():
+    create_index()
